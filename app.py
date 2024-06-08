@@ -9,6 +9,7 @@ import requests
 from flask import Flask
 import json
 import time
+import streamlit as st
 import base64
 
 app = Flask(__name__)
@@ -46,38 +47,7 @@ for file in paths_to_delete:
     except Exception as e:
         print(f"Skip Delete {file_path}")
 
-# http server
-class MyHandler(http.server.SimpleHTTPRequestHandler):
-
-    def log_message(self, format, *args):
-        pass
-
-    def do_GET(self):
-        if self.path == '/':
-            self.send_response(200)
-            self.end_headers()
-            self.wfile.write(b'Hello, world')
-        elif self.path == '/sub':
-            try:
-                with open(os.path.join(FILE_PATH, 'sub.txt'), 'rb') as file:
-                    content = file.read()
-                self.send_response(200)
-                self.send_header('Content-Type', 'text/plain; charset=utf-8')
-                self.end_headers()
-                self.wfile.write(content)
-            except FileNotFoundError:
-                self.send_response(500)
-                self.end_headers()
-                self.wfile.write(b'Error reading file')
-        else:
-            self.send_response(404)
-            self.end_headers()
-            self.wfile.write(b'Not found')
-
-httpd = socketserver.TCPServer(('', PORT), MyHandler)
-server_thread = threading.Thread(target=httpd.serve_forever)
-server_thread.daemon = True
-server_thread.start()
+st.write("Hello world")
 
 # Generate xr-ay config file
 def generate_config():
